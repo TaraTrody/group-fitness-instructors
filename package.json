@@ -7,12 +7,14 @@
     "development": "nodemon",
     "build": "webpack --config webpack.config.client.production.js && webpack --mode=production --config webpack.config.server.js",
     "start": "NODE_ENV=production node ./dist/server.generated.js",
-    "lint": "eslint"
+    "lint": "eslint ./src --fix",
+    "lint:watch": "watch 'npm run lint'"
   },
   "author": "Tara Trody",
   "license": "ISC",
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
+    "bcrypt": "3.0.4",
     "body-parser": "^1.18.3",
     "compression": "^1.7.3",
     "cookie-parser": "^1.4.3",
@@ -34,6 +36,7 @@
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.12.4",
+    "eslint-watch": "^4.0.2",
     "nodemon": "^1.18.9",
     "webpack": "^4.29.0",
     "webpack-cli": "^3.2.1",
