@@ -21,7 +21,7 @@ const UserSchema = new mongoose.Schema({
     // eslint-disable-next-line no-useless-escape
     match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/],
   },
-  password: {
+  hashed_password: {
     type: String,
     required: 'Password is required',
     min: [8, 'Password must have at least 8 characters'],
@@ -44,25 +44,38 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-UserSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) {
-    return next();
-  }
+// eslint-disable-next-line consistent-return
 
-  try {
-    const hash = await bcrypt.hashAsync(this.password, 12);
+UserSchema.virtual('password')
+  .set((password) => {
+    this._password = password;
+    this.hashed_password = this.encryptPassword(password);
+  })
+  .get(() => this._password);
 
-    this.password = hash;
-    next();
-  } catch (err) {
-    next(err);
-  }
-});
 
 UserSchema.methods = {
+  encryptPassword(password) {
+    if (!password) {
+      return '';
+    }
+    try {
+      return bcrypt.hash(password, 12);
+    } catch (err) {
+      return '';
+    }
+  },
   authenticate(plaintextPassword) {
-    return bcrypt.compare(plaintextPassword, this.password);
+    try {
+      return bcrypt.compare(plaintextPassword, this.hashed_password);
+    } catch (err) {
+      throw err;
+    }
   },
 };
+
+UserSchema.path('hashed_password').validate((password) => {
+
+});
 
 export default mongoose.model('User', UserSchema);
