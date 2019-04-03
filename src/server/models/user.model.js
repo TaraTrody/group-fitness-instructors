@@ -74,8 +74,13 @@ UserSchema.methods = {
   },
 };
 
-UserSchema.path('hashed_password').validate((password) => {
-
-});
+UserSchema.path('hashed_password').validate( (v)=> {
+  if(this._password && this._password < 8) {
+    this.invalidate('password', 'Password must be at least 8 characters')
+  } 
+  if(this.isNew && !this._password) {
+    this.invalidate('password', 'Password is required.')
+  }
+}, null);
 
 export default mongoose.model('User', UserSchema);

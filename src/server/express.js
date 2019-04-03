@@ -6,6 +6,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 
 import Template from '../../template';
+import userRoutes from './routes/user.routes'
+import authRoutes from './routes/auth.routes'
 
 const app = express();
 
@@ -15,6 +17,9 @@ app.use(cookieParser());
 app.use(compress());
 app.use(helmet());
 app.use(cors());
+
+app.use('/', userRoutes)
+app.use('/', authRoutes)
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
