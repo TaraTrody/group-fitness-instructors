@@ -4,10 +4,14 @@ import cookieParser from 'cookie-parser';
 import compress from 'compression';
 import cors from 'cors';
 import helmet from 'helmet';
+import mongoose from 'mongoose';
 
+
+import config from '../config/config';
 import Template from '../../template';
 import userRoutes from './routes/user.routes'
 import authRoutes from './routes/auth.routes'
+
 
 const app = express();
 
@@ -18,8 +22,19 @@ app.use(compress());
 app.use(helmet());
 app.use(cors());
 
-app.use('/', userRoutes)
-app.use('/', authRoutes)
+app.use('/api/v1/', userRoutes)
+app.use('/api/v1/', authRoutes)
+
+
+mongoose.Promise = global.Promise;
+mongoose.connect(config.mongoUri);
+mongoose.connection.on('error', () => {
+  throw new Error(`unable to connect to database: ${config.mongoUri}`);
+});
+
+app.get('/', (req, res) => {
+  res.status(200).send(Template());
+});
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
@@ -28,8 +43,10 @@ app.use((err, req, res, next) => {
   }
 });
 
-app.get('/', (req, res) => {
-  res.status(200).send(Template());
+/* eslint-disable no-console */
+app.listen(config.port, (err) => {
+  if (err) {
+    console.log(err);
+  }
+  console.info('Server started on port %s.', config.port);
 });
-
-export default app;

@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import expressJwt from 'express-jwt'
-import User from '../models/user.model'
+import User from '../db/models/user.model'
 import config from '../../config/config'
 
 const signin = (req, res) => {
@@ -34,7 +34,18 @@ const signout = (req, res) => {
     message: 'Successfully signed out'
   })
 }
-const requireSignin = ''
-const hasAuthorization = (req, res) => { }
+const requireSignin = expressJwt({
+  secret: config.jwtSecret,
+  requestProperty: 'auth' 
+})
+const hasAuthorization = (req, res, next) => {
+  const authorized = req.profile && req.auth && req.profile._id == req.auth._id 
+  if(!(authorized)) { //why use this syntax
+    return res.status(403).json({
+      error: 'User is not authorized'
+    })
+  }
+  next()
+}
 
 export default { signin, signout, requireSignin, hasAuthorization }
