@@ -1,7 +1,8 @@
 {
   "verbose": false,
   "watch": [
-    "./src"
+    "./src",
+    "template.js"
   ],
-  "exec": "webpack --mode=development --config webpack.config.server.js && node ./dist/main.js"
+  "exec": "concurrently \"webpack --watch --mode=development --config webpack.config.server.js\"  \"node ./dist/main.js\""
 }

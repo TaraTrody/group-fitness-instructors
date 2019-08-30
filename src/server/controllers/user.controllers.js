@@ -2,23 +2,25 @@ import _ from 'lodash'
 import User from '../db/models/user.model'
 import errorHandler from '../utils/dbErrorHandler'
 
-const create = (req, res, next) => {
-  let newUser = new User(req.body)
+const createUser = (req, res, next) => {
+
+  const newUser = new User(req.body)
+
   newUser.save((err, result) => {
     if (err) {
       return res.status(400).json({
         error: errorHandler.getErrorMessage(err)
       })
-    } else {
-      res.status(200).json({
-        message: 'Successfully signed up!',
-        result
-      })
     }
-  })
+    res.status(200).json({
+      message: 'Successfully signed up!',
+
+    })
+  }
+  )
 }
 
-const list = (req, res) => {
+const getUserList = (req, res) => {
   User.find((err, user) => {
     if (err) {
       return res.status(400).json({
@@ -41,11 +43,11 @@ const userByID = (req, res, next, ID) => {
   })
 }
 
-const read = (req, res) => {
+const getUser = (req, res) => {
   return res.json(req.profile)
 }
 
-const update = (req, res, next) => {
+const updateUser = (req, res, next) => {
   let user = req.profile
   user = _.extend(user, req.body)
   user.updated = Date.now()
@@ -55,7 +57,7 @@ const update = (req, res, next) => {
         error: errorHandler.getErrorMessage(err)
       })
     }
-    user.hashed_password = undefined
+    user.password = undefined
     res.json({
       message: 'User account updated',
       user
@@ -63,7 +65,7 @@ const update = (req, res, next) => {
   })
 }
 
-const remove = (req, res, next) => {
+const removeUser = (req, res, next) => {
   let user = req.profile
   user.deleteOne((err, deletedUser) => {
     if (err) {
@@ -71,7 +73,7 @@ const remove = (req, res, next) => {
         error: errorHandler.getErrorMessage(err)
       })
     }
-    user.hashed_password = undefined
+    user.password = undefined
     res.json({
       message: 'User account deleted',
       deletedUser
@@ -80,4 +82,4 @@ const remove = (req, res, next) => {
   )
 }
 
-export default { create, list, userByID, read, update, remove }
+export default { createUser, getUserList, userByID, getUser, updateUser, removeUser }

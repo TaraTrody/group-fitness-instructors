@@ -15,6 +15,12 @@ import authRoutes from './routes/auth.routes'
 
 const app = express();
 
+
+mongoose.connect(config.mongoUri);
+mongoose.connection.on('error', () => {
+  throw new Error(`unable to connect to database: ${config.mongoUri}`);
+});
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -22,18 +28,15 @@ app.use(compress());
 app.use(helmet());
 app.use(cors());
 
-app.use('/api/v1/', userRoutes)
-app.use('/api/v1/', authRoutes)
+app.use('/api/v1', userRoutes)
+app.use('/api/v1', authRoutes)
 
 
-mongoose.Promise = global.Promise;
-mongoose.connect(config.mongoUri);
-mongoose.connection.on('error', () => {
-  throw new Error(`unable to connect to database: ${config.mongoUri}`);
-});
 
 app.get('/', (req, res) => {
+
   res.status(200).send(Template());
+
 });
 
 // eslint-disable-next-line no-unused-vars

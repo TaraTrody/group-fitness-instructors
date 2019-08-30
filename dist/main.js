@@ -87,62 +87,520 @@ module.exports =
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/config/config.js":
-/*!******************************!*\
-  !*** ./src/config/config.js ***!
-  \******************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\nvar config = {\n  env: \"development\" || false,\n  port: process.env.PORT || 3000,\n  jwtSecret: process.env.JWT_SECRET || 'YOUR_secret_key',\n  mongoUri: process.env.MONGODB_URI || process.env.MONGO_HOST || \"mongodb://\".concat(process.env.IP || 'localhost', \":\").concat(process.env.MONGO_PORT || '27017', \"/mernproject\")\n};\n/* harmony default export */ __webpack_exports__[\"default\"] = (config);\n\n//# sourceURL=webpack:///./src/config/config.js?");
-
-/***/ }),
-
-/***/ "./src/server/express.js":
+/***/ "../src/config/config.js":
 /*!*******************************!*\
-  !*** ./src/server/express.js ***!
+  !*** ../src/config/config.js ***!
   \*******************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! express */ \"express\");\n/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var body_parser__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! body-parser */ \"body-parser\");\n/* harmony import */ var body_parser__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(body_parser__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var cookie_parser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! cookie-parser */ \"cookie-parser\");\n/* harmony import */ var cookie_parser__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(cookie_parser__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var compression__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! compression */ \"compression\");\n/* harmony import */ var compression__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(compression__WEBPACK_IMPORTED_MODULE_3__);\n/* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! cors */ \"cors\");\n/* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(cors__WEBPACK_IMPORTED_MODULE_4__);\n/* harmony import */ var helmet__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! helmet */ \"helmet\");\n/* harmony import */ var helmet__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(helmet__WEBPACK_IMPORTED_MODULE_5__);\n/* harmony import */ var _template__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../template */ \"./template.js\");\n\n\n\n\n\n\n\nvar app = express__WEBPACK_IMPORTED_MODULE_0___default()();\napp.use(body_parser__WEBPACK_IMPORTED_MODULE_1___default.a.json());\napp.use(body_parser__WEBPACK_IMPORTED_MODULE_1___default.a.urlencoded({\n  extended: true\n}));\napp.use(cookie_parser__WEBPACK_IMPORTED_MODULE_2___default()());\napp.use(compression__WEBPACK_IMPORTED_MODULE_3___default()());\napp.use(helmet__WEBPACK_IMPORTED_MODULE_5___default()());\napp.use(cors__WEBPACK_IMPORTED_MODULE_4___default()()); // eslint-disable-next-line no-unused-vars\n\napp.use(function (err, req, res, next) {\n  if (err.name === 'UnauthorizedError') {\n    res.status(401).json({\n      error: \"\".concat(err.name, \": \").concat(err.message)\n    });\n  }\n});\napp.get('/', function (req, res) {\n  res.status(200).send(Object(_template__WEBPACK_IMPORTED_MODULE_6__[\"default\"])());\n});\n/* harmony default export */ __webpack_exports__[\"default\"] = (app);\n\n//# sourceURL=webpack:///./src/server/express.js?");
+__webpack_require__.r(__webpack_exports__);
+var config = {
+  env: "development" || false,
+  port: process.env.PORT || 3030,
+  jwtSecret: process.env.JWT_SECRET || 'mongodb+srv://STrody:<1Fb9CQpFiQ7pM9JB>@cluster0-nybw4.mongodb.net/test',
+  mongoUri: process.env.MONGODB_URI || process.env.MONGO_HOST || "mongodb://".concat(process.env.IP || 'localhost', ":").concat(process.env.MONGO_PORT || '27017', "/mernproject")
+};
+/* harmony default export */ __webpack_exports__["default"] = (config);
 
 /***/ }),
 
-/***/ "./src/server/index.js":
-/*!*****************************!*\
-  !*** ./src/server/index.js ***!
-  \*****************************/
+/***/ "../src/server/app.js":
+/*!****************************!*\
+  !*** ../src/server/app.js ***!
+  \****************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mongoose */ \"mongoose\");\n/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _config_config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../config/config */ \"./src/config/config.js\");\n/* harmony import */ var _express__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./express */ \"./src/server/express.js\");\n/* eslint-disable no-console */\n\n\n // Connection URL\n\nmongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Promise = global.Promise;\nmongoose__WEBPACK_IMPORTED_MODULE_0___default.a.connect(_config_config__WEBPACK_IMPORTED_MODULE_1__[\"default\"].mongoUri);\nmongoose__WEBPACK_IMPORTED_MODULE_0___default.a.connection.on('error', function () {\n  throw new Error(\"unable to connect to database: \".concat(_config_config__WEBPACK_IMPORTED_MODULE_1__[\"default\"].mongoUri));\n});\n_express__WEBPACK_IMPORTED_MODULE_2__[\"default\"].listen(_config_config__WEBPACK_IMPORTED_MODULE_1__[\"default\"].port, function (err) {\n  if (err) {\n    console.log(err);\n  }\n\n  console.info('Server started on port %s.', _config_config__WEBPACK_IMPORTED_MODULE_1__[\"default\"].port);\n});\n\n//# sourceURL=webpack:///./src/server/index.js?");
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! express */ "express");
+/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var body_parser__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! body-parser */ "body-parser");
+/* harmony import */ var body_parser__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(body_parser__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var cookie_parser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! cookie-parser */ "cookie-parser");
+/* harmony import */ var cookie_parser__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(cookie_parser__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var compression__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! compression */ "compression");
+/* harmony import */ var compression__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(compression__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! cors */ "cors");
+/* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(cors__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var helmet__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! helmet */ "helmet");
+/* harmony import */ var helmet__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(helmet__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! mongoose */ "mongoose");
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _config_config__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../config/config */ "../src/config/config.js");
+/* harmony import */ var _template__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../template */ "../template.js");
+/* harmony import */ var _routes_user_routes__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./routes/user.routes */ "../src/server/routes/user.routes.js");
+/* harmony import */ var _routes_auth_routes__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./routes/auth.routes */ "../src/server/routes/auth.routes.js");
+
+
+
+
+
+
+
+
+
+
+
+var app = express__WEBPACK_IMPORTED_MODULE_0___default()();
+mongoose__WEBPACK_IMPORTED_MODULE_6___default.a.connect(_config_config__WEBPACK_IMPORTED_MODULE_7__["default"].mongoUri);
+mongoose__WEBPACK_IMPORTED_MODULE_6___default.a.connection.on('error', function () {
+  throw new Error("unable to connect to database: ".concat(_config_config__WEBPACK_IMPORTED_MODULE_7__["default"].mongoUri));
+});
+app.use(body_parser__WEBPACK_IMPORTED_MODULE_1___default.a.json());
+app.use(body_parser__WEBPACK_IMPORTED_MODULE_1___default.a.urlencoded({
+  extended: true
+}));
+app.use(cookie_parser__WEBPACK_IMPORTED_MODULE_2___default()());
+app.use(compression__WEBPACK_IMPORTED_MODULE_3___default()());
+app.use(helmet__WEBPACK_IMPORTED_MODULE_5___default()());
+app.use(cors__WEBPACK_IMPORTED_MODULE_4___default()());
+app.use('/api/v1', _routes_user_routes__WEBPACK_IMPORTED_MODULE_9__["default"]);
+app.use('/api/v1', _routes_auth_routes__WEBPACK_IMPORTED_MODULE_10__["default"]);
+app.get('/', function (req, res) {
+  res.status(200).send(Object(_template__WEBPACK_IMPORTED_MODULE_8__["default"])());
+}); // eslint-disable-next-line no-unused-vars
+
+app.use(function (err, req, res, next) {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).json({
+      error: "".concat(err.name, ": ").concat(err.message)
+    });
+  }
+});
+/* eslint-disable no-console */
+
+app.listen(_config_config__WEBPACK_IMPORTED_MODULE_7__["default"].port, function (err) {
+  if (err) {
+    console.log(err);
+  }
+
+  console.info('Server started on port %s.', _config_config__WEBPACK_IMPORTED_MODULE_7__["default"].port);
+});
 
 /***/ }),
 
-/***/ "./template.js":
-/*!*********************!*\
-  !*** ./template.js ***!
-  \*********************/
+/***/ "../src/server/controllers/auth.controllers.js":
+/*!*****************************************************!*\
+  !*** ../src/server/controllers/auth.controllers.js ***!
+  \*****************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony default export */ __webpack_exports__[\"default\"] = (function () {\n  return \"<!DOCTYPE html>\\n<html lang=\\\"en\\\">\\n<head>\\n  <meta charset=\\\"UTF-8\\\"/>\\n  <meta name=\\\"viewport\\\" content=\\\"width=device-width, initial-scale=1.0\\\"/>\\n  <meta http-equiv=\\\"X-UA-Compatible\\\" content=\\\"ie=edge\\\"/>\\n  <title>Document</title>\\n</head>\\n<body>\\n  <p>Hello World</p>\\n</body>\\n</html>\";\n});\n\n//# sourceURL=webpack:///./template.js?");
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jsonwebtoken */ "jsonwebtoken");
+/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jsonwebtoken__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var express_jwt__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! express-jwt */ "express-jwt");
+/* harmony import */ var express_jwt__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(express_jwt__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _db_models_user_model__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../db/models/user.model */ "../src/server/db/models/user.model.js");
+/* harmony import */ var _config_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../config/config */ "../src/config/config.js");
+
+
+
+
+
+var signin = function signin(req, res) {
+  _db_models_user_model__WEBPACK_IMPORTED_MODULE_2__["default"].findOne({
+    'email': req.body.email
+  }, function (err, user) {
+    if (err || !user) {
+      return res.status(401).json({
+        message: 'User not found'
+      });
+    }
+
+    if (!user.authenticate(req.body.password)) {
+      return res.status(401).json({
+        message: "Email and password don't match"
+      });
+    }
+
+    var token = jsonwebtoken__WEBPACK_IMPORTED_MODULE_0___default.a.sign({
+      _id: user._id
+    }, _config_config__WEBPACK_IMPORTED_MODULE_3__["default"].jwtSecret);
+    res.cookie("t", token, {
+      expire: new Date() + 9999
+    });
+    return res.json({
+      token: token,
+      user: {
+        _id: user._id,
+        lastName: user.lastName,
+        email: user.email
+      }
+    });
+  });
+};
+
+var signout = function signout(req, res) {
+  res.clearCookie('t');
+  return res.status(200).json({
+    message: 'Successfully signed out'
+  });
+};
+
+var requireSignin = express_jwt__WEBPACK_IMPORTED_MODULE_1___default()({
+  secret: _config_config__WEBPACK_IMPORTED_MODULE_3__["default"].jwtSecret,
+  requestProperty: 'auth'
+});
+
+var hasAuthorization = function hasAuthorization(req, res, next) {
+  var authorized = req.profile && req.auth && req.profile._id == req.auth._id;
+
+  if (!authorized) {
+    //why use this syntax
+    return res.status(403).json({
+      error: 'User is not authorized'
+    });
+  }
+
+  next();
+};
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  signin: signin,
+  signout: signout,
+  requireSignin: requireSignin,
+  hasAuthorization: hasAuthorization
+});
+
+/***/ }),
+
+/***/ "../src/server/controllers/user.controllers.js":
+/*!*****************************************************!*\
+  !*** ../src/server/controllers/user.controllers.js ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _db_models_user_model__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../db/models/user.model */ "../src/server/db/models/user.model.js");
+/* harmony import */ var _utils_dbErrorHandler__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/dbErrorHandler */ "../src/server/utils/dbErrorHandler.js");
+
+
+
+
+var create = function create(req, res, next) {
+  var newUser = new _db_models_user_model__WEBPACK_IMPORTED_MODULE_1__["default"](req.body);
+  newUser.save(function (err, result) {
+    if (err) {
+      return res.status(400).json({
+        error: _utils_dbErrorHandler__WEBPACK_IMPORTED_MODULE_2__["default"].getErrorMessage(err)
+      });
+    }
+
+    res.status(200).json({
+      message: 'Successfully signed up!'
+    });
+  });
+};
+
+var list = function list(req, res) {
+  _db_models_user_model__WEBPACK_IMPORTED_MODULE_1__["default"].find(function (err, user) {
+    if (err) {
+      return res.status(400).json({
+        error: _utils_dbErrorHandler__WEBPACK_IMPORTED_MODULE_2__["default"].getErrorMessage(err)
+      });
+    }
+
+    res.json(user);
+  }).select('-hashed_password');
+};
+
+var userByID = function userByID(req, res, next, ID) {
+  _db_models_user_model__WEBPACK_IMPORTED_MODULE_1__["default"].findById().exec(function (err, user) {
+    if (err || !user) {
+      return res.status(400).json({
+        error: 'User not found'
+      });
+    }
+
+    req.profile = user;
+    next();
+  });
+};
+
+var read = function read(req, res) {
+  return res.json(req.profile);
+};
+
+var update = function update(req, res, next) {
+  var user = req.profile;
+  user = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.extend(user, req.body);
+  user.updated = Date.now();
+  user.save(function (err) {
+    if (err) {
+      return res.status(400).json({
+        error: _utils_dbErrorHandler__WEBPACK_IMPORTED_MODULE_2__["default"].getErrorMessage(err)
+      });
+    }
+
+    user.hashed_password = undefined;
+    res.json({
+      message: 'User account updated',
+      user: user
+    });
+  });
+};
+
+var remove = function remove(req, res, next) {
+  var user = req.profile;
+  user.deleteOne(function (err, deletedUser) {
+    if (err) {
+      return res.status(400).json({
+        error: _utils_dbErrorHandler__WEBPACK_IMPORTED_MODULE_2__["default"].getErrorMessage(err)
+      });
+    }
+
+    user.hashed_password = undefined;
+    res.json({
+      message: 'User account deleted',
+      deletedUser: deletedUser
+    });
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  create: create,
+  list: list,
+  userByID: userByID,
+  read: read,
+  update: update,
+  remove: remove
+});
+
+/***/ }),
+
+/***/ "../src/server/db/models/user.model.js":
+/*!*********************************************!*\
+  !*** ../src/server/db/models/user.model.js ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mongoose */ "mongoose");
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var bcrypt__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! bcrypt */ "bcrypt");
+/* harmony import */ var bcrypt__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(bcrypt__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var UserSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema({
+  firstName: {
+    type: String,
+    trim: true,
+    min: [2, 'Name should be between 2 and 30 characters'],
+    max: [30, 'Name should be between 3 and 30 characters'],
+    required: 'First name is required'
+  },
+  lastName: {
+    type: String,
+    trim: true,
+    min: [2, 'Name should be between 2 and 30 characters'],
+    max: [30, 'Name should be between 3 and 30 characters'],
+    required: 'Last name is required'
+  },
+  email: {
+    type: String,
+    unique: true,
+    required: 'Email is required',
+    // eslint-disable-next-line no-useless-escape
+    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/]
+  },
+  password: {
+    type: String,
+    required: 'Password is required',
+    min: [8, 'Password must have at least 8 characters'],
+    max: 160
+  },
+  userType: {
+    type: String,
+    enum: ['Instructor', 'Studio/Gym'],
+    required: 'Please select'
+  },
+  created: {
+    type: Date,
+    default: Date.now
+  },
+  updated: {
+    type: Date
+  }
+}); // eslint-disable-next-line consistent-return
+
+UserSchema.pre("save", function (next) {
+  if (!this.isModified('password')) {
+    return next();
+  }
+
+  try {
+    bcrypt__WEBPACK_IMPORTED_MODULE_1___default.a.hash(this.password, 10, function (err, hash) {
+      if (err) return next(err);
+      this.password = hash;
+      next();
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+UserSchema.methods = {
+  authenticate: function authenticate(plaintextPassword) {
+    try {
+      return bcrypt__WEBPACK_IMPORTED_MODULE_1___default.a.compare(plaintextPassword, this.hashed_password);
+    } catch (err) {
+      throw err;
+    }
+  }
+};
+UserSchema.path('password').validate(function (v) {
+  if (this.password && this.password < 8) {
+    this.invalidate('password', 'Password must be at least 8 characters');
+  }
+
+  if (this.isNew && !this.password) {
+    this.invalidate('password', 'Password is required.');
+  }
+}, null);
+/* harmony default export */ __webpack_exports__["default"] = (mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.model('User', UserSchema));
+
+/***/ }),
+
+/***/ "../src/server/routes/auth.routes.js":
+/*!*******************************************!*\
+  !*** ../src/server/routes/auth.routes.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! express */ "express");
+/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _controllers_auth_controllers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../controllers/auth.controllers */ "../src/server/controllers/auth.controllers.js");
+
+
+var router = express__WEBPACK_IMPORTED_MODULE_0___default.a.Router();
+router.post('/auth/signin', _controllers_auth_controllers__WEBPACK_IMPORTED_MODULE_1__["default"].signin);
+router.get('auth/signout', _controllers_auth_controllers__WEBPACK_IMPORTED_MODULE_1__["default"].signout);
+/* harmony default export */ __webpack_exports__["default"] = (router);
+
+/***/ }),
+
+/***/ "../src/server/routes/user.routes.js":
+/*!*******************************************!*\
+  !*** ../src/server/routes/user.routes.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! express */ "express");
+/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _controllers_user_controllers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../controllers/user.controllers */ "../src/server/controllers/user.controllers.js");
+/* harmony import */ var _controllers_auth_controllers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/auth.controllers */ "../src/server/controllers/auth.controllers.js");
+
+
+
+var router = express__WEBPACK_IMPORTED_MODULE_0___default.a.Router();
+router.route('/users').get(_controllers_user_controllers__WEBPACK_IMPORTED_MODULE_1__["default"].list).post(_controllers_user_controllers__WEBPACK_IMPORTED_MODULE_1__["default"].create);
+router.route('/users/:userId').get(_controllers_auth_controllers__WEBPACK_IMPORTED_MODULE_2__["default"].requireSignin, _controllers_user_controllers__WEBPACK_IMPORTED_MODULE_1__["default"].read).put(_controllers_auth_controllers__WEBPACK_IMPORTED_MODULE_2__["default"].requireSignin, _controllers_auth_controllers__WEBPACK_IMPORTED_MODULE_2__["default"].hasAuthorization, _controllers_user_controllers__WEBPACK_IMPORTED_MODULE_1__["default"].update).delete(_controllers_auth_controllers__WEBPACK_IMPORTED_MODULE_2__["default"].requireSignin, _controllers_auth_controllers__WEBPACK_IMPORTED_MODULE_2__["default"].hasAuthorization, _controllers_user_controllers__WEBPACK_IMPORTED_MODULE_1__["default"].remove);
+router.param('userId', _controllers_user_controllers__WEBPACK_IMPORTED_MODULE_1__["default"].userByID);
+/* harmony default export */ __webpack_exports__["default"] = (router);
+
+/***/ }),
+
+/***/ "../src/server/utils/dbErrorHandler.js":
+/*!*********************************************!*\
+  !*** ../src/server/utils/dbErrorHandler.js ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var getErrorMessage = function getErrorMessage(err) {
+  var message = '';
+
+  if (err.code) {
+    switch (err.code) {
+      case 11000:
+      case 11001:
+        message = getUniqueErrorMessage(err);
+        break;
+
+      default:
+        message = 'Something went wrong';
+    }
+  } else {
+    for (var errName in err.errors) {
+      if (err.errors[errName].message) message = err.errors[errName].message;
+    }
+  }
+
+  return message;
+};
+
+var getUniqueErrorMessage = function getUniqueErrorMessage(err) {
+  var output;
+
+  try {
+    var fieldName = err.message.substring(err.message.lastIndexOf('.$') + 2, err.message.lastIndexOf('_1'));
+    output = fieldName.charAt(0).toUpperCase() + fieldName.slice(1) + ' already exists';
+  } catch (ex) {
+    output = 'Unique field already exists';
+  }
+
+  return output;
+};
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  getErrorMessage: getErrorMessage
+});
+
+/***/ }),
+
+/***/ "../template.js":
+/*!**********************!*\
+  !*** ../template.js ***!
+  \**********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (function () {
+  return "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\"/>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n  <meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\"/>\n  <title>Document</title>\n</head>\n<body>\n  <p>Hello Big Shantara World</p>\n</body>\n</html>";
+});
 
 /***/ }),
 
 /***/ 0:
-/*!***********************************!*\
-  !*** multi ./src/server/index.js ***!
-  \***********************************/
+/*!**********************************!*\
+  !*** multi ../src/server/app.js ***!
+  \**********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("module.exports = __webpack_require__(/*! /Users/shantaratrody/development/group-fitness-instructors/src/server/index.js */\"./src/server/index.js\");\n\n\n//# sourceURL=webpack:///multi_./src/server/index.js?");
+module.exports = __webpack_require__(/*! /Users/shantaratrody/development/group-fitness-instructors/src/server/app.js */"../src/server/app.js");
+
+
+/***/ }),
+
+/***/ "bcrypt":
+/*!*************************!*\
+  !*** external "bcrypt" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("bcrypt");
 
 /***/ }),
 
@@ -153,7 +611,7 @@ eval("module.exports = __webpack_require__(/*! /Users/shantaratrody/development/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("module.exports = require(\"body-parser\");\n\n//# sourceURL=webpack:///external_%22body-parser%22?");
+module.exports = require("body-parser");
 
 /***/ }),
 
@@ -164,7 +622,7 @@ eval("module.exports = require(\"body-parser\");\n\n//# sourceURL=webpack:///ext
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("module.exports = require(\"compression\");\n\n//# sourceURL=webpack:///external_%22compression%22?");
+module.exports = require("compression");
 
 /***/ }),
 
@@ -175,7 +633,7 @@ eval("module.exports = require(\"compression\");\n\n//# sourceURL=webpack:///ext
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("module.exports = require(\"cookie-parser\");\n\n//# sourceURL=webpack:///external_%22cookie-parser%22?");
+module.exports = require("cookie-parser");
 
 /***/ }),
 
@@ -186,7 +644,7 @@ eval("module.exports = require(\"cookie-parser\");\n\n//# sourceURL=webpack:///e
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("module.exports = require(\"cors\");\n\n//# sourceURL=webpack:///external_%22cors%22?");
+module.exports = require("cors");
 
 /***/ }),
 
@@ -197,7 +655,18 @@ eval("module.exports = require(\"cors\");\n\n//# sourceURL=webpack:///external_%
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("module.exports = require(\"express\");\n\n//# sourceURL=webpack:///external_%22express%22?");
+module.exports = require("express");
+
+/***/ }),
+
+/***/ "express-jwt":
+/*!******************************!*\
+  !*** external "express-jwt" ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("express-jwt");
 
 /***/ }),
 
@@ -208,7 +677,29 @@ eval("module.exports = require(\"express\");\n\n//# sourceURL=webpack:///externa
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("module.exports = require(\"helmet\");\n\n//# sourceURL=webpack:///external_%22helmet%22?");
+module.exports = require("helmet");
+
+/***/ }),
+
+/***/ "jsonwebtoken":
+/*!*******************************!*\
+  !*** external "jsonwebtoken" ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("jsonwebtoken");
+
+/***/ }),
+
+/***/ "lodash":
+/*!*************************!*\
+  !*** external "lodash" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("lodash");
 
 /***/ }),
 
@@ -219,8 +710,9 @@ eval("module.exports = require(\"helmet\");\n\n//# sourceURL=webpack:///external
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("module.exports = require(\"mongoose\");\n\n//# sourceURL=webpack:///external_%22mongoose%22?");
+module.exports = require("mongoose");
 
 /***/ })
 
 /******/ });
+//# sourceMappingURL=main.js.map

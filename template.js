@@ -7,6 +7,6 @@ export default () => `<!DOCTYPE html>
   <title>Document</title>
 </head>
 <body>
-  <p>Hello World</p>
+  <p>Hello Big Shantara World</p>
 </body>
 </html>`;
