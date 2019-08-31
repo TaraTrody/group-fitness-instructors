@@ -40,7 +40,9 @@ const requireSignin = expressJwt({
 })
 const hasAuthorization = (req, res, next) => {
   const authorized = req.profile && req.auth && req.profile._id == req.auth._id 
-  if(!(authorized)) { //why use this syntax
+  console.log(req.profile)
+  console.log(req.auth)
+  if(!(authorized)) { 
     return res.status(403).json({
       error: 'User is not authorized'
     })

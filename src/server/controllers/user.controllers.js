@@ -5,6 +5,7 @@ import errorHandler from '../utils/dbErrorHandler'
 const createUser = (req, res, next) => {
 
   const newUser = new User(req.body)
+  console.log(newUser)
 
   newUser.save((err, result) => {
     if (err) {
@@ -20,7 +21,7 @@ const createUser = (req, res, next) => {
   )
 }
 
-const getUserList = (req, res) => {
+const getUserList = (req, res) => { 
   User.find((err, user) => {
     if (err) {
       return res.status(400).json({
@@ -28,22 +29,26 @@ const getUserList = (req, res) => {
       })
     }
     res.json(user)
-  }).select('-hashed_password')
+  })
+    .select('-password')
 }
 
-const userByID = (req, res, next, ID) => {
-  User.findById().exec((err, user) => {
-    if (err || !user) {
-      return res.status(400).json({
-        error: 'User not found'
+const userByID = (req, res, next, id) => {
+
+  User.findById(id).exec((err, user) => {
+    if (err || !user)
+      return res.status('400').json({
+        error: "User not found"
       })
-    }
+
     req.profile = user
     next()
   })
 }
 
 const getUser = (req, res) => {
+  req.profile.password = undefined
+
   return res.json(req.profile)
 }
 
@@ -65,9 +70,9 @@ const updateUser = (req, res, next) => {
   })
 }
 
-const removeUser = (req, res, next) => {
+const removeUser = (req, res, ) => {
   let user = req.profile
-  user.deleteOne((err, deletedUser) => {
+  User.deleteOne(user, (err, deletedUser) => {
     if (err) {
       return res.status(400).json({
         error: errorHandler.getErrorMessage(err)

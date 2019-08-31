@@ -13,7 +13,7 @@ router
 router.route('/users/:userId')
   .get(authCtrl.requireSignin, userCtrl.getUser)
   .put(authCtrl.requireSignin, authCtrl.hasAuthorization, userCtrl.updateUser)
-  .delete(authCtrl.requireSignin, authCtrl.hasAuthorization, userCtrl.removeUser)
+  .delete(authCtrl.requireSignin, authCtrl.hasAuthorization,  userCtrl.removeUser)
 
 router.param('userId', userCtrl.userByID)
 

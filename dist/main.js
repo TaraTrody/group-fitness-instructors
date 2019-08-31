@@ -249,9 +249,10 @@ var requireSignin = express_jwt__WEBPACK_IMPORTED_MODULE_1___default()({
 
 var hasAuthorization = function hasAuthorization(req, res, next) {
   var authorized = req.profile && req.auth && req.profile._id == req.auth._id;
+  console.log(req.profile);
+  console.log(req.auth);
 
   if (!authorized) {
-    //why use this syntax
     return res.status(403).json({
       error: 'User is not authorized'
     });
@@ -286,8 +287,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var create = function create(req, res, next) {
+var createUser = function createUser(req, res, next) {
   var newUser = new _db_models_user_model__WEBPACK_IMPORTED_MODULE_1__["default"](req.body);
+  console.log(newUser);
   newUser.save(function (err, result) {
     if (err) {
       return res.status(400).json({
@@ -301,7 +303,7 @@ var create = function create(req, res, next) {
   });
 };
 
-var list = function list(req, res) {
+var getUserList = function getUserList(req, res) {
   _db_models_user_model__WEBPACK_IMPORTED_MODULE_1__["default"].find(function (err, user) {
     if (err) {
       return res.status(400).json({
@@ -310,27 +312,25 @@ var list = function list(req, res) {
     }
 
     res.json(user);
-  }).select('-hashed_password');
+  }).select('-password');
 };
 
-var userByID = function userByID(req, res, next, ID) {
-  _db_models_user_model__WEBPACK_IMPORTED_MODULE_1__["default"].findById().exec(function (err, user) {
-    if (err || !user) {
-      return res.status(400).json({
-        error: 'User not found'
-      });
-    }
-
+var userByID = function userByID(req, res, next, id) {
+  _db_models_user_model__WEBPACK_IMPORTED_MODULE_1__["default"].findById(id).exec(function (err, user) {
+    if (err || !user) return res.status('400').json({
+      error: "User not found"
+    });
     req.profile = user;
     next();
   });
 };
 
-var read = function read(req, res) {
+var getUser = function getUser(req, res) {
+  req.profile.password = undefined;
   return res.json(req.profile);
 };
 
-var update = function update(req, res, next) {
+var updateUser = function updateUser(req, res, next) {
   var user = req.profile;
   user = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.extend(user, req.body);
   user.updated = Date.now();
@@ -341,7 +341,7 @@ var update = function update(req, res, next) {
       });
     }
 
-    user.hashed_password = undefined;
+    user.password = undefined;
     res.json({
       message: 'User account updated',
       user: user
@@ -349,16 +349,16 @@ var update = function update(req, res, next) {
   });
 };
 
-var remove = function remove(req, res, next) {
+var removeUser = function removeUser(req, res) {
   var user = req.profile;
-  user.deleteOne(function (err, deletedUser) {
+  _db_models_user_model__WEBPACK_IMPORTED_MODULE_1__["default"].deleteOne(user, function (err, deletedUser) {
     if (err) {
       return res.status(400).json({
         error: _utils_dbErrorHandler__WEBPACK_IMPORTED_MODULE_2__["default"].getErrorMessage(err)
       });
     }
 
-    user.hashed_password = undefined;
+    user.password = undefined;
     res.json({
       message: 'User account deleted',
       deletedUser: deletedUser
@@ -367,12 +367,12 @@ var remove = function remove(req, res, next) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  create: create,
-  list: list,
+  createUser: createUser,
+  getUserList: getUserList,
   userByID: userByID,
-  read: read,
-  update: update,
-  remove: remove
+  getUser: getUser,
+  updateUser: updateUser,
+  removeUser: removeUser
 });
 
 /***/ }),
@@ -409,10 +409,10 @@ var UserSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema({
   },
   email: {
     type: String,
-    unique: true,
+    unique: 'Email already exists',
     required: 'Email is required',
     // eslint-disable-next-line no-useless-escape
-    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/]
+    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please use valid email address']
   },
   password: {
     type: String,
@@ -452,7 +452,7 @@ UserSchema.pre("save", function (next) {
 UserSchema.methods = {
   authenticate: function authenticate(plaintextPassword) {
     try {
-      return bcrypt__WEBPACK_IMPORTED_MODULE_1___default.a.compare(plaintextPassword, this.hashed_password);
+      return bcrypt__WEBPACK_IMPORTED_MODULE_1___default.a.compare(plaintextPassword, this.password);
     } catch (err) {
       throw err;
     }
@@ -487,7 +487,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var router = express__WEBPACK_IMPORTED_MODULE_0___default.a.Router();
 router.post('/auth/signin', _controllers_auth_controllers__WEBPACK_IMPORTED_MODULE_1__["default"].signin);
-router.get('auth/signout', _controllers_auth_controllers__WEBPACK_IMPORTED_MODULE_1__["default"].signout);
+router.get('/auth/signout', _controllers_auth_controllers__WEBPACK_IMPORTED_MODULE_1__["default"].signout);
 /* harmony default export */ __webpack_exports__["default"] = (router);
 
 /***/ }),
@@ -509,8 +509,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var router = express__WEBPACK_IMPORTED_MODULE_0___default.a.Router();
-router.route('/users').get(_controllers_user_controllers__WEBPACK_IMPORTED_MODULE_1__["default"].list).post(_controllers_user_controllers__WEBPACK_IMPORTED_MODULE_1__["default"].create);
-router.route('/users/:userId').get(_controllers_auth_controllers__WEBPACK_IMPORTED_MODULE_2__["default"].requireSignin, _controllers_user_controllers__WEBPACK_IMPORTED_MODULE_1__["default"].read).put(_controllers_auth_controllers__WEBPACK_IMPORTED_MODULE_2__["default"].requireSignin, _controllers_auth_controllers__WEBPACK_IMPORTED_MODULE_2__["default"].hasAuthorization, _controllers_user_controllers__WEBPACK_IMPORTED_MODULE_1__["default"].update).delete(_controllers_auth_controllers__WEBPACK_IMPORTED_MODULE_2__["default"].requireSignin, _controllers_auth_controllers__WEBPACK_IMPORTED_MODULE_2__["default"].hasAuthorization, _controllers_user_controllers__WEBPACK_IMPORTED_MODULE_1__["default"].remove);
+router.route('/users').get(_controllers_user_controllers__WEBPACK_IMPORTED_MODULE_1__["default"].getUserList).post(_controllers_user_controllers__WEBPACK_IMPORTED_MODULE_1__["default"].createUser);
+router.route('/users/:userId').get(_controllers_auth_controllers__WEBPACK_IMPORTED_MODULE_2__["default"].requireSignin, _controllers_user_controllers__WEBPACK_IMPORTED_MODULE_1__["default"].getUser).put(_controllers_auth_controllers__WEBPACK_IMPORTED_MODULE_2__["default"].requireSignin, _controllers_auth_controllers__WEBPACK_IMPORTED_MODULE_2__["default"].hasAuthorization, _controllers_user_controllers__WEBPACK_IMPORTED_MODULE_1__["default"].updateUser).delete(_controllers_auth_controllers__WEBPACK_IMPORTED_MODULE_2__["default"].requireSignin, _controllers_auth_controllers__WEBPACK_IMPORTED_MODULE_2__["default"].hasAuthorization, _controllers_user_controllers__WEBPACK_IMPORTED_MODULE_1__["default"].removeUser);
 router.param('userId', _controllers_user_controllers__WEBPACK_IMPORTED_MODULE_1__["default"].userByID);
 /* harmony default export */ __webpack_exports__["default"] = (router);
 
